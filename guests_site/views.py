@@ -5,17 +5,14 @@ from django.urls import reverse_lazy
 from .forms import guestsForm
 from .models import guests_registration
 
-# --- Function-Based Views (FBV) ---
+
 def register_guest(request):
     form = guestsForm()
     if request.method == 'POST':
         form = guestsForm(request.POST)
         if form.is_valid():
             form.save()
-            # FIX: We use redirect to the clean form page after a successful save.
-            return redirect('register') 
-        
-    # FIX: This renders the form with any errors if validation failed (on POST) or displays a blank form (on GET).
+        return redirect('register') 
     context = {"form": form}
     return render(request, 'home.html', context)
 @login_required
@@ -25,8 +22,6 @@ def dashboard_view(request):
     return render(request, 'dashboard.html', context)
 
 
-# --- Class-Based Views (CBVs) ---
-# NOTE: The definition with 'class' makes these objects valid for .as_view()
 
 class GuestUpdateView(UpdateView):
     model = guests_registration
